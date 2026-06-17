@@ -1,0 +1,310 @@
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;700;800&family=Quicksand:wght@400;500;600&display=swap');
+*{box-sizing:border-box;margin:0;padding:0;}
+body-wrap{display:block;}
+.app{font-family:'Quicksand',sans-serif;display:flex;flex-direction:column;align-items:center;min-height:500px;background:var(--color-background-tertiary);padding-bottom:16px;}
+header{width:100%;max-width:660px;padding:16px 20px 10px;display:flex;align-items:center;gap:12px;}
+.doki-hdr{width:50px;height:50px;border-radius:50%;background:#FFD6E7;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 3px white,0 0 0 5px #FFB3CC;flex-shrink:0;overflow:hidden;}
+.hdr-info{flex:1;}
+.hdr-info h1{font-family:'Nunito',sans-serif;font-size:1.1rem;font-weight:800;color:#7C3AED;}
+.hdr-info p{font-size:0.74rem;color:var(--color-text-secondary);}
+.sdot{width:7px;height:7px;background:#4ADE80;border-radius:50%;display:inline-block;margin-right:4px;box-shadow:0 0 5px #4ADE80;}
+.btn-cfg{background:none;border:1px solid #FFB3CC;border-radius:50%;width:34px;height:34px;font-size:0.95rem;cursor:pointer;color:var(--color-text-secondary);display:flex;align-items:center;justify-content:center;transition:background 0.2s;}
+.btn-cfg:hover{background:#FFF0F5;}
+.disc{width:100%;max-width:660px;margin:0 16px 6px;background:#FEF3C7;border-left:3px solid #F59E0B;border-radius:8px;padding:9px 13px;font-size:0.72rem;color:#92400E;line-height:1.4;}
+.gpill{display:none;align-items:center;gap:5px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:20px;padding:3px 11px;font-size:0.72rem;color:#166534;font-weight:600;max-width:660px;width:fit-content;margin:0 16px 4px;}
+.gpill.on{display:flex;}
+.alert-box{display:none;width:100%;max-width:660px;margin:0 16px 6px;background:#FEE2E2;border-left:3px solid #EF4444;border-radius:12px;padding:13px 15px;}
+.alert-box.on{display:block;}
+.alert-box h3{font-family:'Nunito',sans-serif;font-weight:800;color:#EF4444;font-size:0.9rem;margin-bottom:5px;}
+.alert-box p{font-size:0.79rem;color:#7F1D1D;line-height:1.5;margin-bottom:9px;}
+.wa-btn{display:inline-flex;align-items:center;gap:7px;background:#25D366;color:white;border:none;border-radius:20px;padding:8px 16px;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.83rem;cursor:pointer;text-decoration:none;}
+.dismiss-btn{background:none;border:none;color:#B91C1C;font-size:0.74rem;cursor:pointer;margin-left:10px;text-decoration:underline;}
+.chat-wrap{width:100%;max-width:660px;display:flex;flex-direction:column;padding:0 16px;gap:10px;}
+#chat-box{min-height:280px;max-height:340px;overflow-y:auto;display:flex;flex-direction:column;gap:12px;padding:14px;background:var(--color-background-primary);border-radius:16px;border:0.5px solid var(--color-border-tertiary);scroll-behavior:smooth;}
+#chat-box::-webkit-scrollbar{width:3px;}
+#chat-box::-webkit-scrollbar-thumb{background:#FFB3CC;border-radius:3px;}
+.msg{display:flex;gap:8px;align-items:flex-end;}
+.msg.user{flex-direction:row-reverse;}
+.av{width:28px;height:28px;border-radius:50%;flex-shrink:0;overflow:hidden;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#FFB3CC,#C084FC);}
+.av.uav{background:linear-gradient(135deg,#C084FC,#7C3AED);font-size:0.78rem;color:white;font-weight:700;}
+.bubble{max-width:78%;padding:9px 13px;border-radius:16px;font-size:0.83rem;line-height:1.5;white-space:pre-wrap;}
+.msg.ai .bubble{background:#FFF0F5;border-bottom-left-radius:3px;color:var(--color-text-primary);}
+.msg.user .bubble{background:#F3E8FF;border-bottom-right-radius:3px;color:var(--color-text-primary);}
+.dots span{display:inline-block;width:6px;height:6px;background:#FF6B9D;border-radius:50%;margin:0 2px;animation:db 1.2s infinite;}
+.dots span:nth-child(2){animation-delay:0.2s;}
+.dots span:nth-child(3){animation-delay:0.4s;}
+@keyframes db{0%,80%,100%{transform:translateY(0);opacity:0.5;}40%{transform:translateY(-5px);opacity:1;}}
+.input-area{background:var(--color-background-primary);border-radius:16px;border:0.5px solid var(--color-border-tertiary);padding:11px 13px;display:flex;flex-direction:column;gap:8px;}
+.tbox{min-height:36px;background:#FFF0F5;border-radius:9px;padding:7px 11px;font-size:0.82rem;color:var(--color-text-secondary);border:1px dashed #FFB3CC;display:flex;align-items:center;}
+#ttxt{flex:1;outline:none;color:var(--color-text-primary);}
+#ttxt:empty::before{content:attr(data-placeholder);opacity:0.6;color:var(--color-text-secondary);}
+.ctrls{display:flex;gap:8px;align-items:center;}
+.mic-btn{width:46px;height:46px;border-radius:50%;border:none;background:linear-gradient(135deg,#FF6B9D,#C084FC);color:white;font-size:1.1rem;cursor:pointer;flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:transform 0.2s;}
+.mic-btn:hover{transform:scale(1.06);}
+.mic-btn.on{background:linear-gradient(135deg,#EF4444,#F97316);animation:mp 1s infinite;}
+@keyframes mp{0%,100%{transform:scale(1);}50%{transform:scale(1.07);}}
+.vviz{flex:1;display:none;align-items:center;justify-content:center;gap:3px;height:28px;}
+.vviz.on{display:flex;}
+.vviz .b{width:4px;background:#FF6B9D;border-radius:3px;animation:ba 0.8s ease-in-out infinite alternate;height:7px;}
+.vviz .b:nth-child(2){animation-delay:0.1s;}
+.vviz .b:nth-child(3){animation-delay:0.2s;height:18px;}
+.vviz .b:nth-child(4){animation-delay:0.15s;}
+.vviz .b:nth-child(5){animation-delay:0.05s;}
+@keyframes ba{from{height:5px;opacity:0.5;}to{height:22px;opacity:1;}}
+.send-btn{padding:0 18px;height:40px;border-radius:20px;border:none;background:linear-gradient(135deg,#C084FC,#7C3AED);color:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.83rem;cursor:pointer;transition:transform 0.2s,opacity 0.2s;}
+.send-btn:hover{transform:scale(1.03);}
+.send-btn:disabled{opacity:0.5;cursor:not-allowed;}
+.chips{display:flex;flex-wrap:wrap;gap:6px;padding:0 16px 10px;max-width:660px;width:100%;}
+.chip{background:var(--color-background-primary);border:1px solid #FFB3CC;color:#FF6B9D;border-radius:18px;padding:5px 11px;font-size:0.74rem;font-family:'Quicksand',sans-serif;font-weight:600;cursor:pointer;transition:all 0.2s;}
+.chip:hover{background:#FFF0F5;border-color:#FF6B9D;}
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(45,27,51,0.5);z-index:100;align-items:center;justify-content:center;}
+.modal-bg.on{display:flex;}
+.modal{background:var(--color-background-primary);border-radius:20px;padding:24px;width:88%;max-width:360px;border:0.5px solid var(--color-border-tertiary);}
+.modal h2{font-family:'Nunito',sans-serif;font-weight:800;color:#7C3AED;font-size:1rem;margin-bottom:5px;}
+.modal p{font-size:0.76rem;color:var(--color-text-secondary);margin-bottom:15px;line-height:1.4;}
+.field{margin-bottom:12px;}
+.field label{display:block;font-size:0.76rem;font-weight:600;color:var(--color-text-secondary);margin-bottom:4px;}
+.field input{width:100%;padding:9px 11px;border-radius:9px;border:1px solid #FFB3CC;font-family:'Quicksand',sans-serif;font-size:0.83rem;outline:none;background:var(--color-background-primary);color:var(--color-text-primary);}
+.field input:focus{border-color:#C084FC;}
+.mactions{display:flex;gap:8px;margin-top:4px;}
+.save-btn{flex:1;padding:10px;border-radius:10px;border:none;background:linear-gradient(135deg,#C084FC,#7C3AED);color:white;font-family:'Nunito',sans-serif;font-weight:700;font-size:0.85rem;cursor:pointer;}
+.cancel-btn{padding:10px 14px;border-radius:10px;border:1px solid #FFB3CC;background:none;color:var(--color-text-secondary);font-family:'Quicksand',sans-serif;font-size:0.83rem;cursor:pointer;}
+footer{width:100%;max-width:660px;text-align:center;padding:8px 16px 4px;font-size:0.68rem;color:var(--color-text-secondary);}
+</style>
+
+<div class="app">
+
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h2>Configure guardian</h2>
+    <p>If Doki detects something concerning, you'll get the option to send a WhatsApp message to this person.</p>
+    <div class="field"><label>Guardian's name</label><input type="text" id="inp-name" placeholder="e.g. Mom, Dad, Aunt Rosa…"></div>
+    <div class="field"><label>WhatsApp number (with country code)</label><input type="tel" id="inp-phone" placeholder="e.g. 15551234567"></div>
+    <div class="mactions">
+      <button class="cancel-btn" onclick="closeModal()">Cancel</button>
+      <button class="save-btn" onclick="saveGuardian()">Save</button>
+    </div>
+  </div>
+</div>
+
+<header>
+  <div class="doki-hdr">
+    <svg viewBox="0 0 80 80" xmlns="http://www.w3.org/2000/svg" width="50" height="50">
+      <circle cx="40" cy="40" r="36" fill="#FFD6E7"/>
+      <rect x="18" y="10" width="44" height="18" rx="8" fill="#3D1F5F"/>
+      <ellipse cx="12" cy="36" rx="8" ry="18" fill="#3D1F5F"/>
+      <ellipse cx="68" cy="36" rx="8" ry="18" fill="#3D1F5F"/>
+      <ellipse cx="28" cy="38" rx="8" ry="9" fill="white"/>
+      <ellipse cx="52" cy="38" rx="8" ry="9" fill="white"/>
+      <circle cx="29" cy="38" r="5.5" fill="#2D1B33"/>
+      <circle cx="53" cy="38" r="5.5" fill="#2D1B33"/>
+      <circle cx="31" cy="35" r="2" fill="white"/>
+      <circle cx="55" cy="35" r="2" fill="white"/>
+      <ellipse cx="20" cy="50" rx="7" ry="4" fill="#FF9FC0" opacity="0.5"/>
+      <ellipse cx="60" cy="50" rx="7" ry="4" fill="#FF9FC0" opacity="0.5"/>
+      <path d="M31 55 Q40 63 49 55" stroke="#FF6B9D" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+    </svg>
+  </div>
+  <div class="hdr-info">
+    <h1>Doki</h1>
+    <p><span class="sdot"></span>Your wellness companion · talk or type</p>
+  </div>
+  <button class="btn-cfg" onclick="openModal()" title="Configure guardian">&#9881;</button>
+</header>
+
+<div class="gpill" id="gpill"><span>&#128737;</span><span id="glabel">Guardian configured</span></div>
+
+<div class="disc">&#9888;&#65039; <strong>Notice:</strong> Doki helps you reflect on patterns — <strong>it does not diagnose</strong>. If you have concerns about your relationship with food, please consult a health professional.</div>
+
+<div class="alert-box" id="alert-box">
+  <h3>&#128155; Doki is concerned about you</h3>
+  <p id="alert-msg">Something you shared seems important. Would you like someone you trust to know how you're feeling?</p>
+  <a class="wa-btn" id="wa-link" href="#" target="_blank">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.126 1.533 5.862L.057 23.5l5.765-1.516A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.019-1.381l-.36-.214-3.42.9.913-3.32-.235-.375A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg>
+    Message my guardian
+  </a>
+  <button class="dismiss-btn" onclick="dismissAlert()">Not right now</button>
+</div>
+
+<div class="chat-wrap">
+  <div id="chat-box">
+    <div class="msg ai">
+      <div class="av">
+        <svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="28" height="28">
+          <circle cx="20" cy="20" r="18" fill="#FFD6E7"/>
+          <rect x="9" y="5" width="22" height="12" rx="5" fill="#3D1F5F"/>
+          <ellipse cx="6" cy="20" rx="4" ry="10" fill="#3D1F5F"/>
+          <ellipse cx="34" cy="20" rx="4" ry="10" fill="#3D1F5F"/>
+          <circle cx="14" cy="20" r="4" fill="white"/><circle cx="26" cy="20" r="4" fill="white"/>
+          <circle cx="15" cy="19" r="2.5" fill="#2D1B33"/><circle cx="27" cy="19" r="2.5" fill="#2D1B33"/>
+          <circle cx="16" cy="18" r="1" fill="white"/><circle cx="28" cy="18" r="1" fill="white"/>
+          <ellipse cx="10" cy="27" rx="4" ry="2.5" fill="#FF9FC0" opacity="0.5"/>
+          <ellipse cx="30" cy="27" rx="4" ry="2.5" fill="#FF9FC0" opacity="0.5"/>
+          <path d="M15 30 Q20 34 25 30" stroke="#FF6B9D" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+      <div class="bubble">Hi there! I'm Doki. Tell me about your day — what you ate, how you felt before and after meals, anything that stressed you out… whatever you want to share. You can speak or type!</div>
+    </div>
+  </div>
+
+  <div class="input-area">
+    <div class="tbox">
+      <span id="ttxt" contenteditable="true" data-placeholder="Press the mic or type here…"></span>
+    </div>
+    <div class="ctrls">
+      <button class="mic-btn" id="mic-btn" title="Speak">&#127897;</button>
+      <div class="vviz" id="vviz"><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div><div class="b"></div></div>
+      <button class="send-btn" id="send-btn">Send</button>
+    </div>
+  </div>
+</div>
+
+<div class="chips">
+  <button class="chip" onclick="chip(this)">Analyze my full day</button>
+  <button class="chip" onclick="chip(this)">What patterns do you see?</button>
+  <button class="chip" onclick="chip(this)">I ate because of anxiety</button>
+  <button class="chip" onclick="chip(this)">I skipped a meal</button>
+  <button class="chip" onclick="chip(this)">How can I feel better?</button>
+</div>
+
+<footer>Doki does not replace medical or psychological care. If you need support, talk to a trusted adult or professional.</footer>
+
+</div>
+
+<script>
+const SYS = `You are Doki, a warm, empathetic, non-judgmental wellness companion.
+Your role is to help the user reflect on their eating habits and emotions related to food.
+
+When the user shares their day:
+1. Listen with empathy and validate their feelings.
+2. Ask gentle questions to understand emotional context (were you stressed? alone? how did you feel after?).
+3. Identify potential patterns (emotional eating, skipping meals, restricting, compensating, bingeing).
+4. Share observations carefully using phrases like "I notice..." or "I wonder if...".
+5. NEVER make clinical diagnoses.
+6. Keep a warm tone, like a caring friend — not clinical.
+7. Respond in English, concisely (max 4 sentences per turn).
+
+IMPORTANT — Serious signal detection:
+At the end of EACH response, on a separate line, include ONLY if applicable:
+SERIOUS_ALERT: true — [brief reason, max 15 words]
+
+Trigger SERIOUS_ALERT:true only if you detect ONE OR MORE of:
+- Severe restriction (not eating for a full day or multiple days)
+- Purging (self-induced vomiting, laxatives to compensate)
+- Bingeing followed by extreme guilt or self-punishment
+- Self-harm related to food or body image
+- Very negative body thoughts interfering with daily life
+- User expresses intense suffering or asks for urgent help
+
+If NO serious signals, do NOT include the SERIOUS_ALERT line.`;
+
+let hist = [];
+let recog = null;
+let listening = false;
+let guardian = {name:'', phone:''};
+
+const chatBox = document.getElementById('chat-box');
+const ttxt    = document.getElementById('ttxt');
+const micBtn  = document.getElementById('mic-btn');
+const sendBtn = document.getElementById('send-btn');
+const vviz    = document.getElementById('vviz');
+const alertBox= document.getElementById('alert-box');
+const alertMsg= document.getElementById('alert-msg');
+const waLink  = document.getElementById('wa-link');
+const gpill   = document.getElementById('gpill');
+const glabel  = document.getElementById('glabel');
+
+function openModal(){
+  document.getElementById('inp-name').value = guardian.name;
+  document.getElementById('inp-phone').value = guardian.phone;
+  document.getElementById('modal-bg').classList.add('on');
+}
+function closeModal(){ document.getElementById('modal-bg').classList.remove('on'); }
+function saveGuardian(){
+  const n = document.getElementById('inp-name').value.trim();
+  const p = document.getElementById('inp-phone').value.trim().replace(/\s+/g,'');
+  if(!n||!p){alert('Please fill in both fields.');return;}
+  guardian={name:n,phone:p};
+  glabel.textContent='Guardian: '+n;
+  gpill.classList.add('on');
+  closeModal();
+}
+
+function showAlert(reason){
+  const g = guardian.name||'your guardian';
+  alertMsg.textContent = `I noticed something that concerns me: ${reason}. Talking to ${g} could really help. Would you like to send them a message now?`;
+  const msg = `Hi ${g}, I'm Doki, a wellness companion app. I wanted to let you know that today ${reason.toLowerCase()}. It might be worth having a chat. With care, Doki`;
+  if(guardian.phone){
+    waLink.href='https://wa.me/'+guardian.phone+'?text='+encodeURIComponent(msg);
+    waLink.innerHTML='<svg width="16" height="16" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.125.557 4.126 1.533 5.862L.057 23.5l5.765-1.516A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.808 9.808 0 01-5.019-1.381l-.36-.214-3.42.9.913-3.32-.235-.375A9.818 9.818 0 012.182 12C2.182 6.57 6.57 2.182 12 2.182S21.818 6.57 21.818 12 17.43 21.818 12 21.818z"/></svg> Message '+g;
+    waLink.onclick=null;
+  } else {
+    waLink.href='#';
+    waLink.innerHTML='&#9881; Set up number first';
+    waLink.onclick=(e)=>{e.preventDefault();dismissAlert();openModal();};
+  }
+  alertBox.classList.add('on');
+}
+function dismissAlert(){ alertBox.classList.remove('on'); }
+
+const SR = window.SpeechRecognition||window.webkitSpeechRecognition;
+if(SR){
+  recog=new SR();recog.lang='en-US';recog.interimResults=true;recog.continuous=false;
+  recog.onresult=(e)=>{ttxt.textContent=Array.from(e.results).map(r=>r[0].transcript).join('');};
+  recog.onend=()=>stopListen();
+  recog.onerror=()=>stopListen();
+} else { micBtn.disabled=true; micBtn.style.opacity='0.5'; }
+
+micBtn.addEventListener('click',()=>{ if(!recog)return; listening?(recog.stop(),stopListen()):startListen(); });
+function startListen(){ listening=true; micBtn.innerHTML='&#9209;'; micBtn.classList.add('on'); vviz.classList.add('on'); ttxt.textContent=''; recog.start(); }
+function stopListen(){ listening=false; micBtn.innerHTML='&#127897;'; micBtn.classList.remove('on'); vviz.classList.remove('on'); }
+
+sendBtn.addEventListener('click',send);
+ttxt.addEventListener('keydown',(e)=>{ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();send();} });
+function chip(btn){ ttxt.textContent=btn.textContent; send(); }
+
+async function send(){
+  const text=ttxt.textContent.trim();
+  if(!text)return;
+  ttxt.textContent='';
+  addMsg('user',text);
+  hist.push({role:'user',content:text});
+  sendBtn.disabled=true;
+  const tid=typing();
+  try{
+    const res=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-6',max_tokens:1000,system:SYS,messages:hist})
+    });
+    const data=await res.json();
+    rmTyping(tid);
+    let full=data.content?.map(b=>b.text||'').join('')||'(no response)';
+    const am=full.match(/SERIOUS_ALERT:\s*true\s*[—–-]\s*(.+)/i);
+    let clean=full.replace(/SERIOUS_ALERT:\s*true\s*[—–-]\s*.+/i,'').trim();
+    hist.push({role:'assistant',content:clean});
+    addMsg('ai',clean);
+    if(am) setTimeout(()=>showAlert(am[1].trim()),700);
+    if('speechSynthesis'in window&&clean){ const u=new SpeechSynthesisUtterance(clean);u.lang='en-US';u.rate=0.95;speechSynthesis.speak(u); }
+  }catch(e){ rmTyping(tid); addMsg('ai','Something went wrong connecting. Please try again.'); }
+  finally{ sendBtn.disabled=false; }
+}
+
+const DSVG=`<svg viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg" width="28" height="28"><circle cx="20" cy="20" r="18" fill="#FFD6E7"/><rect x="9" y="5" width="22" height="12" rx="5" fill="#3D1F5F"/><ellipse cx="6" cy="20" rx="4" ry="10" fill="#3D1F5F"/><ellipse cx="34" cy="20" rx="4" ry="10" fill="#3D1F5F"/><circle cx="14" cy="20" r="4" fill="white"/><circle cx="26" cy="20" r="4" fill="white"/><circle cx="15" cy="19" r="2.5" fill="#2D1B33"/><circle cx="27" cy="19" r="2.5" fill="#2D1B33"/><circle cx="16" cy="18" r="1" fill="white"/><circle cx="28" cy="18" r="1" fill="white"/><ellipse cx="10" cy="27" rx="4" ry="2.5" fill="#FF9FC0" opacity="0.5"/><ellipse cx="30" cy="27" rx="4" ry="2.5" fill="#FF9FC0" opacity="0.5"/><path d="M15 30 Q20 34 25 30" stroke="#FF6B9D" stroke-width="1.5" fill="none" stroke-linecap="round"/></svg>`;
+
+function addMsg(role,text){
+  const w=document.createElement('div'); w.className='msg '+role;
+  const a=document.createElement('div'); a.className='av'+(role==='user'?' uav':'');
+  a.innerHTML=role==='ai'?DSVG:'&#129489;';
+  const b=document.createElement('div'); b.className='bubble'; b.textContent=text;
+  w.appendChild(a); w.appendChild(b); chatBox.appendChild(w); chatBox.scrollTop=chatBox.scrollHeight;
+}
+function typing(){
+  const id=Date.now(); const w=document.createElement('div'); w.className='msg ai'; w.dataset.tid=id;
+  w.innerHTML=`<div class="av">${DSVG}</div><div class="bubble dots"><span></span><span></span><span></span></div>`;
+  chatBox.appendChild(w); chatBox.scrollTop=chatBox.scrollHeight; return id;
+}
+function rmTyping(id){ const el=chatBox.querySelector('[data-tid="'+id+'"]'); if(el)el.remove(); }
+</script>
